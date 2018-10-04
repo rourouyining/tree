@@ -5,6 +5,7 @@
 #define LEFT 0
 #define RIGHT 1
 
+
 typedef struct tree_t{
 	int key;
 	int value;
@@ -16,6 +17,11 @@ typedef struct tree_boot_t
 {
 	tree_t *boot;
 }tree_boot_t;
+
+#define L(p) (p) = (p)->left
+#define R(p) (p) = (p)->right
+
+
 
 tree_boot_t *tree_init(void)
 {
@@ -48,12 +54,12 @@ void tree_search(tree_t *T, int k)
 		}
 		else if(k < p->key)
 		{
-			p = p->left;
+			L(p);
 			continue;
 		}
 		else if(k > p->key)
 		{
-			p = p->right;
+			R(p);
 			continue;
 		}
 	}
@@ -94,12 +100,12 @@ tree_boot_t *tree_delete(tree_boot_t *T, int k)
 		if(k < x->key)
 		{
 			p = x;
-			x = x->left;
+			L(x);
 		}
 		else if(k > x->key)
 		{
 			p = x;
-			x = x->right;
+			R(x);
 		}
 		else
 		{
@@ -114,7 +120,7 @@ tree_boot_t *tree_delete(tree_boot_t *T, int k)
 					while(n->right != NULL)
 					{
 						v = n;
-						n = n->right;	
+						R(n);	
 					}
 
 					v->right = NULL;
@@ -180,9 +186,9 @@ tree_t *tree_traverse(tree_boot_t *T, tree_t *x)
 	{
 		p = m;
 		if(x->key < m->key)
-			m = m->left;
+			L(m);
 		else
-			m = m->right;
+			R(m);
 	}
 
 	return p;

@@ -170,26 +170,29 @@ tree_boot_t *tree_delete(tree_boot_t *T, int k)
 	return T;
 }
 
-tree_boot_t *tree_insert(tree_boot_t *T, int k)
+tree_t *tree_traverse(tree_boot_t *T, tree_t *x)
 {
-	tree_t *x;
 	tree_t *p;
-
-	x = T->boot;
-	while(x != NULL)
+	tree_t *m;
+	m = T->boot;
+	
+	while(m != NULL)
 	{
-		p = x;
-		if(k < x->key)
-			x = x->left;
+		p = m;
+		if(x->key < m->key)
+			m = m->left;
 		else
-			x = x->right;
+			m = m->right;
 	}
 
-	x = (tree_t *)malloc(sizeof(tree_t));
+	return p;
+}
 
-	x->key = k;
-	x->left = NULL;
-	x->right = NULL;
+tree_boot_t *tree_insert(tree_boot_t *T, tree_t *x)
+{
+	tree_t *p;
+
+	p = tree_traverse(T, x);
 
 	if(T->boot == NULL)
 	{
@@ -215,35 +218,59 @@ tree_boot_t *tree_insert(tree_boot_t *T, int k)
 	return T;
 }
 
+tree_boot_t *create_new_in(tree_boot_t *T, int k)
+{	
+	tree_t *x;
+
+	x = (tree_t *)malloc(sizeof(tree_t));
+	if(x == NULL)
+	{
+		printf("malloc error");
+		return T;
+	}
+
+	x->key = k;
+	x->left = NULL;
+	x->right = NULL;
+	
+	T = tree_insert(T, x);
+
+	return T;
+}
+
 int main()
 {
 	tree_boot_t *T;
+
 	T = tree_init();
 
-	T = tree_insert(T, 20);
-	T = tree_insert(T, 10);
-	T = tree_insert(T, 30);
-	T = tree_insert(T, 5);
-	T = tree_insert(T, 15);
-	T = tree_insert(T, 3);
-	T = tree_insert(T, 4);
-	T = tree_insert(T, 12);
-	T = tree_insert(T, 18);
-	T = tree_insert(T, 17);
-	T = tree_insert(T, 19);
-	T = tree_insert(T, 25);
-	T = tree_insert(T, 40);
-	T = tree_insert(T, 45);
-	T = tree_insert(T, 50);
-	T = tree_insert(T, 23);
-	T = tree_insert(T, 14);
-	T = tree_insert(T, 11);
+	T = create_new_in(T, 20);
+	T = create_new_in(T, 10);
+	T = create_new_in(T, 30);
+	T = create_new_in(T, 5);
+	T = create_new_in(T, 15);
+	T = create_new_in(T, 3);
+	T = create_new_in(T, 4);
+	T = create_new_in(T, 12);
+	T = create_new_in(T, 18);
+	T = create_new_in(T, 17);
+	T = create_new_in(T, 19);
+	T = create_new_in(T, 25);
+	T = create_new_in(T, 40);
+	T = create_new_in(T, 45);
+	T = create_new_in(T, 50);
+	T = create_new_in(T, 23);
+	T = create_new_in(T, 14);
+	T = create_new_in(T, 11);
 
 	tree_print(T->boot);
-//	tree_search(T->boot, 5);
-//	tree_search(T->boot, 8);
+	printf("===================\n");
+
+	tree_search(T->boot, 5);
 	
 	printf("===================\n");
 	T = tree_delete(T, 15);
+	
 	tree_print(T->boot);
+	return 0;
 }
